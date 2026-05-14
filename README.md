@@ -17,7 +17,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 
 
-
+## Como instalar
 (cmd)Instalar node.js de la pagina oficial, para checar la version en cmd usa:
     node -v
 
