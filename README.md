@@ -1,22 +1,70 @@
-# Instalacion
+# Instalación
 
-## Instalar Dependencias
-(cmd)Instalar node.js de la pagina oficial, para checar la version en cmd usa:
-    node -v
+## 1. Instalar Node.js
 
-(ps)Instalar pnpm desde el powershell:
-    Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
-(cmd)Checar la version de pnpm en cmd:    
-    pnpm -v
+Descarga e instala la versión más reciente de Node.js desde la página oficial:
 
-(cmd)Dentro de la carpeta del proyecto(C:\...\TaskPet>) usar:
-    pnpm install
+https://nodejs.org/
 
-(cmd)Si sale error code 1 usar:
-    pnpm approve-builds
-(cmd)Aqui tendras que elegir la que te dio error(en rojo ignored..) en el anterior comando
-(cmd)Correr la aplicacion(cmd):
-    pnpm run dev
+Verifica la instalación desde **CMD**:
+
+```bash
+node -v
+```
+
+---
+
+## 2. Instalar pnpm
+
+Ejecuta el siguiente comando en **PowerShell**:
+
+```powershell
+Invoke-WebRequest https://get.pnpm.io/install.ps1 -UseBasicParsing | Invoke-Expression
+```
+
+Verifica la instalación desde **CMD**:
+
+```bash
+pnpm -v
+```
+
+---
+
+## 3. Instalar dependencias del proyecto
+
+Abre una terminal dentro de la carpeta del proyecto:
+
+```bash
+C:\...\TaskPet>
+```
+
+Ejecuta:
+
+```bash
+pnpm install
+```
+
+---
+
+## 4. Solución para `error code 1`
+
+Si durante la instalación aparece un error relacionado con paquetes ignorados (`ignored build scripts`), ejecuta:
+
+```bash
+pnpm approve-builds
+```
+
+Después selecciona el paquete que apareció en rojo en el error anterior.
+
+---
+
+## 5. Ejecutar la aplicación
+
+Inicia el servidor de desarrollo con:
+
+```bash
+pnpm run dev
+```
 
 
 
