@@ -1,37 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import appLogo from '../public/favicon.svg'
+import { Routes, Route } from 'react-router-dom'
 import PWABadge from './PWABadge.jsx'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import RutaProtegida from './componentes/RutaProtegida'
 
+import Landing from './paginas/Landing.jsx'
+import Auth from './paginas/Auth.jsx'
+import Inicio from './paginas/Inicio.jsx'
+import Mascota from './paginas/Mascota.jsx'
+import Pendientes from './paginas/Pendientes.jsx'
+import Calendario from './paginas/Calendario.jsx'
+import Configuracion from './paginas/Configuracion.jsx'
+
+
+ function App() {
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={appLogo} className="logo" alt="TaskPet logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>TaskPet</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Routes>
+            {/* ----------------------------------------------------------------------- RUTAS PUBLICAS (sin necesidad del auth) */}
+            <Route path="/" element={<Landing />} />
+            <Route path="/auth" element={<Auth />} />
+      
+            {/* ----------------------------------------------------------------------- RUTAS PROTEGIDAS (con auth) */}
+            <Route path="/inicio" element={
+              <RutaProtegida><Inicio /></RutaProtegida>
+            } />
+            <Route path="/mascota" element={
+              <RutaProtegida><Mascota /></RutaProtegida>
+            } />
+            <Route path="/pendientes" element={
+              <RutaProtegida><Pendientes /></RutaProtegida>
+            } />
+            <Route path="/calendario" element={
+              <RutaProtegida><Calendario /></RutaProtegida>
+            } />
+            <Route path="/configuracion" element={
+              <RutaProtegida><Configuracion /></RutaProtegida>
+            } />
+          </Routes>
       <PWABadge />
     </>
   )
 }
-
 export default App

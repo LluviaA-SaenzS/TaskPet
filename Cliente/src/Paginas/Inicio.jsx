@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import appLogo from '../../public/favicon.svg'
+import { useNavigate } from 'react-router-dom'
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous"></link>
 import '../Estilos/Inicio.css'
-function App() {
-
-
+export default function Inicio() {
   return (
     <>
       <div className='layout'>
@@ -71,4 +70,4 @@ function App() {
   )
 }
 
-export default App
+
