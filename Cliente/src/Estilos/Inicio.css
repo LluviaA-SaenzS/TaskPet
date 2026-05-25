@@ -1,0 +1,184 @@
+.layout {
+    display: grid;
+    width: 90%;
+    grid-template-columns: 500px 1fr;
+    grid-template-rows: 50px 1fr;
+    grid-template-areas:
+        "header header"
+        "aside  main";
+    gap: 30px;
+    padding: 20px;
+    margin: 0px auto;
+
+}
+
+header {
+    grid-area: header;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+
+
+}
+
+nav {
+    background-color: rgb(194, 194, 194);
+    border-radius: 20px;
+    width: 700px;
+    border: 2px 1px 0px 0px solid black;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    width: 100%;
+    justify-content: space-around;
+}
+
+nav ul li {
+    display: inline-block;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    font-size: 26px;
+}
+
+nav ul li a:hover {
+    color: rgb(255, 255, 255);
+    transition: all 0.3s ease;
+}
+
+#usuario {
+    color: black;
+    grid-area: aside;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+     justify-self: center;
+    align-self: center;
+
+
+}
+
+#usuario .imgPerfil {
+    width: 150px;
+    height: 150px;
+    background-color: antiquewhite;
+    border-radius: 100px;
+}
+
+#usuario .racha {
+    background-color: rgb(223, 223, 223);
+    padding: 0px 10px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, .2);
+
+}
+
+#usuario ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding-inline-start: 0px;
+
+}
+
+#usuario ul div {
+    background-color: rgb(102, 211, 102);
+    width: 30px;
+    height: 30px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, .2);
+    border-radius: 30px;
+
+}
+
+#usuario ul p {
+    position: relative;
+    left: 10px;
+    top: 10px
+}
+
+#petLog {
+    grid-area: main;
+    max-height: 70vh;
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    grid-template-rows: 2fr 2fr 1fr;
+    grid-template-areas:
+        "mascota pendiente"
+        "mascota  completada"
+        "consejo consejo";
+    gap: 20px 10px;
+    justify-self: center;
+    align-self: center;
+
+
+}
+
+#petLog .mascota {
+    background-color: yellowgreen;
+    grid-area: mascota;
+}
+
+#petLog .pendiente {
+    background-color: rgb(186, 186, 186);
+    grid-area: pendiente;
+}
+
+#petLog .completada {
+    background-color: rgb(186, 186, 186);
+    grid-area: completada;
+}
+
+.pendiente,
+.completada {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+  
+
+}
+
+.pendiente p,
+.completada p {
+    padding: 10px;
+    margin: 10px;
+    background-color: aliceblue;
+    width: 30px;
+    height: 30px;
+    font-size: 30px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#petLog .consejo {
+    background-color: rgb(186, 186, 186);
+    grid-area: consejo;
+}
+
+.consejo,
+.pendiente,
+.mascota,
+.completada {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, .2);
+    border-radius: 10px;
+    padding: 5px;
+    font: bold 14px;
+    color: black;
+}
