@@ -79,10 +79,7 @@ function App() {
 
       {/* ── Header ── */}
       <header className="app-header">
-        <button className="btn-hamburger" aria-label="Menú">
-          <span />
-        </button>
-
+      
         <nav className="pill-nav">
           <ul>
             <li>
@@ -106,8 +103,7 @@ function App() {
           </ul>
         </nav>
 
-        <button className="btn-add" aria-label="Agregar">+</button>
-      </header>
+    </header>
 
       {/* ── Cuerpo ── */}
       <div className="page-body">
