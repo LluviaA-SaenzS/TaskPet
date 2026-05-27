@@ -1,5 +1,8 @@
 export default function Pendientes() {
   return (
-    <div>pendientes</div>
+    <div>
+      <h1>pendientes</h1>
+
+    </div>
   )
 }

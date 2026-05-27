@@ -1,29 +1,23 @@
 // Requiere: pnpm add lucide-react
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Home, Settings, ClipboardList, PawPrint, Calendar, Plus, Menu, X } from "lucide-react";
 import "./NavBar.css";
+import { Icon } from "lucide-react";
 
-/* ─────────────────────────────────────
-   Menú burbuja del hamburguesa
-───────────────────────────────────── */
 function BubbleMenu({ open, direction, onClose, active, onNavigate }) {
   const items = [
-    { id: "home",     label: "Home",         Icon: Home },
-    { id: "settings", label: "Configuración", Icon: Settings },
+      { id: "/inicio",        label: "Home",         Icon: Home },
+  { id: "/configuracion", label: "Configuración", Icon: Settings },
   ];
 
-  // En móvil (up) invertimos el orden para que Home quede más cerca del botón
   const ordered = direction === "up" ? [...items].reverse() : items;
 
   return (
     <>
       {open && (
-        <div
-          onClick={onClose}
-          style={{ position: "fixed", inset: 0, zIndex: 40 }}
-        />
+        <div onClick={onClose} style={{ position: "fixed", inset: 0, zIndex: 40 }} />
       )}
-
       <div className={`tp-bubble-menu ${direction}${open ? " open" : ""}`}>
         {ordered.map(({ id, label, Icon }, i) => (
           <button
@@ -42,22 +36,20 @@ function BubbleMenu({ open, direction, onClose, active, onNavigate }) {
   );
 }
 
-/* ─────────────────────────────────────
-   NavBar principal
-───────────────────────────────────── */
-export default function NavBar({ onAdd, onNavigate }) {
+export default function NavBar({ onAdd }) {
+  const navigate = useNavigate();
   const [bubbleOpen, setBubbleOpen] = useState(false);
-  const [activeNav,  setActiveNav]  = useState("home");
+  const [activeNav,  setActiveNav]  = useState("/");
 
   const navItems = [
-    { id: "tasks",    label: "Pendientes", Icon: ClipboardList },
-    { id: "pet",      label: "Mascota",    Icon: PawPrint },
-    { id: "calendar", label: "Calendario", Icon: Calendar },
+    { id: "/pendientes", label: "Pendientes", Icon: ClipboardList },
+  { id: "/mascota",    label: "Mascota",    Icon: PawPrint },
+  { id: "/calendario", label: "Calendario", Icon: Calendar },
   ];
 
   const handleNavigate = (id) => {
     setActiveNav(id);
-    onNavigate?.(id);
+    navigate(id);
   };
 
   const BurgerButton = ({ direction }) => (

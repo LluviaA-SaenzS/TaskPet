@@ -1,5 +1,8 @@
 export default function Configuracion() {
   return (
-    <div>configuracion</div>
+    <div>
+      <h1>configuracion</h1>
+      
+      </div>
   )
 }

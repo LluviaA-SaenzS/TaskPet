@@ -167,10 +167,9 @@
     left: 0;
     right: 0;
     height: 64px;
-    background: var(--tp-surface);
-    border-bottom: 1px solid var(--tp-border);
+    /*background: var(--tp-surface);*/
+    /*border-bottom: 1px solid var(--tp-border);*/
     z-index: 30;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
   }
 
   .tp-mob {

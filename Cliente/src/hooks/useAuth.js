@@ -29,7 +29,7 @@ export function useAuth() {
 
     localStorage.setItem('usuarioActivo', JSON.stringify(encontrado)) //------------------ Usuario existe
     setUsuarioActivo(encontrado) 
-    navigate('/home') 
+    navigate('/inicio') 
     return { ok: true } //---------------------------------------------------------------- se marca como usuarioactivo y navega al home
   }
 //------------------------------------------------------------------------------------------------------------------------- REGISTRARSE
@@ -52,7 +52,7 @@ export function useAuth() {
     localStorage.setItem('usuarios', JSON.stringify(usuarios)) //-------------------- Se almacena los datos de usuarios a usuarios
     localStorage.setItem('usuarioActivo', JSON.stringify(nuevoUsuario)) //----------- Se almacena los datos de nuevousuario a usuarioactivo
     setUsuarioActivo(nuevoUsuario)
-    navigate('/home')
+    navigate('/inicio')
     return { ok: true } //------------------------------------------------------------ se marca como usuarioactivo y navega al home
   }
 //------------------------------------------------------------------------------------------------------------------------- CERRAR SESION
