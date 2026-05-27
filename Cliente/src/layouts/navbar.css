@@ -1,0 +1,187 @@
+/* ─────────────────────────────────────────────
+   NavBar.css — TaskPet
+   Variables globales van en index.css / App.css
+───────────────────────────────────────────── */
+
+/* ── Botón base compartido ── */
+.tp-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  background: transparent;
+  padding: 0;
+  color: var(--tp-fg);
+  font-family: inherit;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.tp-btn:active {
+  transform: scale(0.93);
+  opacity: 0.75;
+}
+
+/* ── Hamburguesa ── */
+.tp-burger {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--tp-surface2);
+  flex-shrink: 0;
+  position: relative; /* ancla las burbujas */
+}
+
+/* ── Pill con 3 ítems ── */
+.tp-pill {
+  display: flex;
+  align-items: center;
+  background: var(--tp-surface2);
+  border-radius: 999px;
+  padding: 5px 6px;
+  gap: 2px;
+}
+
+.tp-pill-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--tp-muted);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.18s, color 0.18s;
+}
+.tp-pill-btn.active {
+  background: var(--tp-surface);
+  color: var(--tp-primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* label oculto en móvil, visible en web */
+.tp-label {
+  display: none;
+}
+
+/* ── Botón agregar (+) ── */
+.tp-add {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--tp-fg);
+  color: var(--tp-surface);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  flex-shrink: 0;
+}
+.tp-add:hover {
+  opacity: 0.85;
+}
+
+/* ── Menú burbuja ── */
+.tp-bubble-menu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 50;
+  left: 0;
+  pointer-events: none;
+}
+.tp-bubble-menu.down {
+  top: calc(100% + 8px);
+}
+.tp-bubble-menu.up {
+  bottom: calc(100% + 8px);
+}
+.tp-bubble-menu.open {
+  pointer-events: auto;
+}
+
+.tp-bubble-item {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tp-surface2);
+  color: var(--tp-fg);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.tp-bubble-item.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+.tp-bubble-item.active {
+  background: var(--tp-fg);
+  color: var(--tp-surface);
+}
+
+/* ══════════════════════════════════════════
+   WEB — barra superior centrada
+   (se activa en ≥768px)
+══════════════════════════════════════════ */
+.tp-web {
+  display: none;
+}
+
+/* ══════════════════════════════════════════
+   MÓVIL — barra inferior
+══════════════════════════════════════════ */
+.tp-mob {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 68px;
+  background: var(--tp-surface);
+  border-top: 1px solid var(--tp-border);
+  padding: 0 16px;
+  z-index: 30;
+}
+
+/* ── Breakpoint: tablet / desktop ── */
+@media (min-width: 768px) {
+  .tp-web {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: var(--tp-surface);
+    border-bottom: 1px solid var(--tp-border);
+    z-index: 30;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  .tp-mob {
+    display: none;
+  }
+
+  .tp-label {
+    display: inline;
+  }
+
+  .tp-pill-btn {
+    padding: 7px 16px;
+  }
+}
