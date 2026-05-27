@@ -27,7 +27,7 @@ export default function Landing() {
 
       {/* NAVBAR */}
       <nav className="landing-nav">
-        <span className="landing-logo">TaskPet <img src='/Logotask.png'></img></span>
+        <span className="landing-logo">TaskPet</span>
         <div className="landing-nav-btns">
           <button className="btn-secundario" onClick={() => navigate('/auth')}>
             Iniciar sesión
@@ -59,7 +59,7 @@ export default function Landing() {
 
         {/* Placeholder imagen hero */}
         <div className="hero-imagen">
-          <span>🐱</span>
+          <img src='/Logotask.svg'></img>
         </div>
       </section>
 
