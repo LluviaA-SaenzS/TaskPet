@@ -1,63 +1,92 @@
-// logica del auth
-// guardar sesion activa en localstorage
+// logica del auth con Supabase
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { supabase } from '../lib/supabase'
 
 export function useAuth() {
   const navigate = useNavigate()
   const [usuarioActivo, setUsuarioActivo] = useState(null)
   const [cargando, setCargando] = useState(true)
 
+  useEffect(() => {
+    // ------------------------------------------------------ Checa si hay una sesion activa
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUsuarioActivo(session?.user ?? null)
+      setCargando(false)
+    })
 
-  useEffect(() => { //------------------------------------------------------ checa si hay una sesion activa/guardada 
-    const sesion = localStorage.getItem('usuarioActivo') //----------------- Sesion obtiene el almacen de usuarioActivo
-    if (sesion) {
-      setUsuarioActivo(JSON.parse(sesion))
-    }
-    setCargando(false)
+    // ------------------------------------------------------ Escucha cambios de sesion en tiempo real
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_evento, session) => {
+      setUsuarioActivo(session?.user ?? null)
+    })
+
+    return () => subscription.unsubscribe()
   }, [])
-//------------------------------------------------------------------------------------------------------------------------- INICIAR SESION
-  function login(usuario, contrasena) { 
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]') //------------- informacion de usuarios en el localstorage
-    const encontrado = usuarios.find( //------------------------------------------------- buscar usuario/contraseña
-      (u) => u.usuario === usuario && u.contrasena === contrasena
-    )
 
-    if (!encontrado) { //----------------------------------------------------------------- No existe usuario/contraseña
+  // --------------------------------------------------------- INICIAR SESION
+  async function login(usuario, contrasena) {
+    // Supabase Auth requiere correo, buscamos el correo por nombre de usuario
+    const { data: perfil, error: errorBusqueda } = await supabase
+      .from('usuarios')
+      .select('correo')
+      .eq('usuario', usuario)
+      .single()
+
+    if (errorBusqueda || !perfil) {
       return { ok: false, error: 'Usuario o contraseña incorrectos.' }
     }
 
-    localStorage.setItem('usuarioActivo', JSON.stringify(encontrado)) //------------------ Usuario existe
-    setUsuarioActivo(encontrado) 
-    navigate('/inicio') 
-    return { ok: true } //---------------------------------------------------------------- se marca como usuarioactivo y navega al home
+    const { error } = await supabase.auth.signInWithPassword({
+      email: perfil.correo,
+      password: contrasena,
+    })
+
+    if (error) {
+      return { ok: false, error: 'Usuario o contraseña incorrectos.' }
+    }
+
+    navigate('/inicio')
+    return { ok: true }
   }
-//------------------------------------------------------------------------------------------------------------------------- REGISTRARSE
-  function registro(usuario, correo, contrasena) {
-    if (!usuario || !correo || !contrasena) { //------------------------------------ Si algun campo falta de llenar
+
+  // --------------------------------------------------------- REGISTRARSE
+  async function registro(usuario, correo, contrasena) {
+    if (!usuario || !correo || !contrasena) {
       return { ok: false, error: 'Por favor completa todos los campos.' }
     }
 
-    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]') //--------- informacion de usuarios en el localstorage
-    const existe = usuarios.find( //------------------------------------------------- buscar usuario/correo
-      (u) => u.usuario === usuario || u.correo === correo
-    )
+    // 1. Crear cuenta en Supabase Auth
+    const { data, error: errorAuth } = await supabase.auth.signUp({
+      email: correo,
+      password: contrasena,
+    })
 
-    if (existe) { //----------------------------------------------------------------- Si ya existe usuario/correo
-      return { ok: false, error: 'El usuario o correo ya están registrados.' }
+    if (errorAuth) {
+      if (errorAuth.message.includes('already registered')) {
+        return { ok: false, error: 'El correo ya está registrado.' }
+      }
+      return { ok: false, error: errorAuth.message }
     }
 
-    const nuevoUsuario = { usuario, correo, contrasena } //-------------------------- Se inserta los datos del nuevo usuario
-    usuarios.push(nuevoUsuario) //--------------------------------------------------- Se guarda los datos en usuarios
-    localStorage.setItem('usuarios', JSON.stringify(usuarios)) //-------------------- Se almacena los datos de usuarios a usuarios
-    localStorage.setItem('usuarioActivo', JSON.stringify(nuevoUsuario)) //----------- Se almacena los datos de nuevousuario a usuarioactivo
-    setUsuarioActivo(nuevoUsuario)
+    // 2. Guardar nombre de usuario en tabla publica usuarios
+    const { error: errorPerfil } = await supabase
+      .from('usuarios')
+      .insert({ id_auth: data.user.id, usuario, correo })
+
+    if (errorPerfil) {
+      if (errorPerfil.code === '23505') { // unique violation
+        return { ok: false, error: 'El usuario o correo ya están registrados.' }
+      }
+      return { ok: false, error: 'Error al crear el perfil.' }
+    }
+
     navigate('/inicio')
-    return { ok: true } //------------------------------------------------------------ se marca como usuarioactivo y navega al home
+    return { ok: true }
   }
-//------------------------------------------------------------------------------------------------------------------------- CERRAR SESION
-  function logout() {
-    localStorage.removeItem('usuarioActivo') 
+
+  // --------------------------------------------------------- CERRAR SESION
+  async function logout() {
+    await supabase.auth.signOut()
     setUsuarioActivo(null)
     navigate('/')
   }
