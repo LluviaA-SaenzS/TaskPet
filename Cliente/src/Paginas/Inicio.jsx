@@ -23,10 +23,6 @@ export default function Inicio() {
 
       {/* ── Header ── */}
       <header className="app-header">
-        <button className="btn-hamburger" aria-label="Menú">
-          <span />
-        </button>
-
       </header>
 
       {/* ── Cuerpo ── */}
@@ -95,7 +91,7 @@ export default function Inicio() {
 
       </div>
     </div>
-  )
+
 
 
     </>

@@ -184,3 +184,16 @@
     padding: 7px 16px;
   }
 }
+
+.tp-page-content {
+  /* móvil: navbar está abajo */
+  padding-bottom: 68px;
+}
+ 
+@media (min-width: 768px) {
+  .tp-page-content {
+    /* web: navbar está arriba, quitamos el de abajo */
+    padding-top:    64px;
+    padding-bottom: 0;
+  }
+}

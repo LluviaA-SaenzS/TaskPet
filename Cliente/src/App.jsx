@@ -22,7 +22,9 @@ import Configuracion from './paginas/Configuracion.jsx'
 
   return (
     <>
+    
      {mostrarNavbar && <Navbar onAdd={() => {}} />}
+      <main className={mostrarNavbar ? 'tp-page-content' : ''}>
       <Routes>
             {/* ----------------------------------------------------------------------- RUTAS PUBLICAS (sin necesidad del auth) */}
             <Route path="/" element={<Landing />} />
@@ -35,6 +37,7 @@ import Configuracion from './paginas/Configuracion.jsx'
             <Route path="/calendario" element={<RutaProtegida><Calendario /></RutaProtegida>} />
             <Route path="/configuracion" element={<RutaProtegida><Configuracion /></RutaProtegida>} />
           </Routes>
+          </main>
       <PWABadge />
     </>
   )
