@@ -66,7 +66,7 @@ export default function Inicio() {
           <div className="mascota-card">
             <div className="pet-badge">😊</div>
             <div className="pet-illustration">
-              <PetDogSVG />
+
             </div>
             <p className="pet-name">PACO</p>
           </div>

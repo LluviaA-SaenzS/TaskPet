@@ -53,42 +53,6 @@ body {
 
 
 
-/* Nav pill */
-nav.pill-nav {
-  flex: 1;
-  background: var(--white);
-  border-radius: var(--radius-pill);
-  box-shadow: var(--shadow-sm);
-  padding: 6px 20px;
-  overflow: hidden;
-}
-nav.pill-nav ul {
-  list-style: none;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 100%;
-}
-nav.pill-nav ul li a {
-  text-decoration: none;
-  color: var(--text-muted);
-  font-size: 14px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  transition: color .2s, background .2s;
-  white-space: nowrap;
-}
-nav.pill-nav ul li a:hover,
-nav.pill-nav ul li a.active {
-  color: var(--text);
-  background: var(--green-light);
-}
-
-
 /* ════════════════════════════════
    PAGE BODY  — desktop (≥ 680px)
 ════════════════════════════════ */
