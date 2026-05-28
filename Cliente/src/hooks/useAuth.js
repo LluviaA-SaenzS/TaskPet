@@ -51,38 +51,28 @@ export function useAuth() {
 
   // --------------------------------------------------------- REGISTRARSE
   async function registro(usuario, correo, contrasena) {
-    if (!usuario || !correo || !contrasena) {
-      return { ok: false, error: 'Por favor completa todos los campos.' }
-    }
-
-    // 1. Crear cuenta en Supabase Auth
-    const { data, error: errorAuth } = await supabase.auth.signUp({
-      email: correo,
-      password: contrasena,
-    })
-
-    if (errorAuth) {
-      if (errorAuth.message.includes('already registered')) {
-        return { ok: false, error: 'El correo ya está registrado.' }
-      }
-      return { ok: false, error: errorAuth.message }
-    }
-
-    // 2. Guardar nombre de usuario en tabla publica usuarios
-    const { error: errorPerfil } = await supabase
-      .from('usuarios')
-      .insert({ id_auth: data.user.id, usuario, correo })
-
-    if (errorPerfil) {
-      if (errorPerfil.code === '23505') { // unique violation
-        return { ok: false, error: 'El usuario o correo ya están registrados.' }
-      }
-      return { ok: false, error: 'Error al crear el perfil.' }
-    }
-
-    navigate('/inicio')
-    return { ok: true }
+  if (!usuario || !correo || !contrasena) {
+    return { ok: false, error: 'Por favor completa todos los campos.' }
   }
+
+  const { error: errorAuth } = await supabase.auth.signUp({
+    email: correo,
+    password: contrasena,
+    options: {
+      data: { usuario, correo } // el trigger lee esto
+    }
+  })
+
+  if (errorAuth) {
+    if (errorAuth.message.includes('already registered')) {
+      return { ok: false, error: 'El correo ya está registrado.' }
+    }
+    return { ok: false, error: errorAuth.message }
+  }
+
+  navigate('/inicio')
+  return { ok: true }
+}
 
   // --------------------------------------------------------- CERRAR SESION
   async function logout() {
