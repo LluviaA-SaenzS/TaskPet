@@ -35,11 +35,14 @@ export function useAuth() {
     if (errorBusqueda || !perfil) {
       return { ok: false, error: 'Usuario o contraseña incorrectos.' }
     }
+    console.log(perfil)
+    console.log(errorBusqueda)
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({ 
       email: perfil.correo,
       password: contrasena,
     })
+   
 
     if (error) {
       return { ok: false, error: 'Usuario o contraseña incorrectos.' }
