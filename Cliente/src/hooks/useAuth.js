@@ -24,33 +24,29 @@ export function useAuth() {
   }, [])
 
   // --------------------------------------------------------- INICIAR SESION
-  async function login(usuario, contrasena) {
-    // Supabase Auth requiere correo, buscamos el correo por nombre de usuario
-    const { data: perfil, error: errorBusqueda } = await supabase
-      .from('usuarios')
-      .select('correo')
-      .eq('usuario', usuario)
-      .single()
+ async function login(usuario, contrasena) {
+  const { data: perfil, error: errorBusqueda } = await supabase
+    .from('usuarios')
+    .select('correo, usuario') // ← agregar usuario
+    .eq('usuario', usuario)
+    .maybeSingle() // ← cambiar .single() por .maybeSingle()
 
-    if (errorBusqueda || !perfil) {
-      return { ok: false, error: 'Usuario o contraseña incorrectos.' }
-    }
-    console.log(perfil)
-    console.log(errorBusqueda)
-
-    const { error } = await supabase.auth.signInWithPassword({ 
-      email: perfil.correo,
-      password: contrasena,
-    })
-   
-
-    if (error) {
-      return { ok: false, error: 'Usuario o contraseña incorrectos.' }
-    }
-
-    navigate('/inicio')
-    return { ok: true }
+  if (errorBusqueda || !perfil) {
+    return { ok: false, error: 'Usuario o contraseña incorrectos.' }
   }
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email: perfil.correo,
+    password: contrasena,
+  })
+
+  if (error) {
+    return { ok: false, error: 'Usuario o contraseña incorrectos.' }
+  }
+
+  navigate('/inicio')
+  return { ok: true }
+}
 
   // --------------------------------------------------------- REGISTRARSE
   async function registro(usuario, correo, contrasena) {

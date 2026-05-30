@@ -21,7 +21,7 @@ const DIAS = [
 
 export default function Inicio() {
    const { usuarioActivo } = useAuth()
-  const { perfil } = useProfile(usuarioActivo)
+  const { perfil, cargando } = useProfile(usuarioActivo)
   return (
     <>
       <div className="layout">
@@ -41,7 +41,7 @@ export default function Inicio() {
             <div className="img-perfil-placeholder" />
           </div>
 
-          <p className="user-name">Bienvenido {perfil?.usuario || 'Nombre de Usuario'}</p>
+          <p className="user-name">Bienvenido {cargando ? '...' : perfil?.usuario || 'Nombre de Usuario'}</p>
 
           <div className="racha-badge">
             <span className="flame">🔥</span>
