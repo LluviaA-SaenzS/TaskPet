@@ -196,7 +196,7 @@ body {
   justify-content: center;
   width: 100%;
 }
-.pet-illustration svg { width: 130px; height: 130px; }
+.pet-illustration img { width: 8em; height: 11em; }
 .pet-name {
   font-size: 17px;
   font-weight: 900;

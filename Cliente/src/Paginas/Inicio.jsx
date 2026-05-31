@@ -1,7 +1,10 @@
 import { useAuth } from '../hooks/useAuth'
 import { useProfile } from '../hooks/useProfile'
+import { usePet } from '../hooks/usePet'
+import { useStreak } from '../hooks/useStreak'
 
 import '../Estilos/Inicio.css'
+
 
 const IconCheck = () => (
   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -9,19 +12,19 @@ const IconCheck = () => (
   </svg>
 )
 
-const DIAS = [
-  { label: 'D', done: false },
-  { label: 'L', done: false },
-  { label: 'M', done: false },
-  { label: 'M', done: true  },
-  { label: 'J', done: true  },
-  { label: 'V', done: 'hoy' },
-  { label: 'S', done: false },
-]
+const DIAS_LABELS = ['D', 'L', 'M', 'M', 'J', 'V', 'S']
+const diaHoy = new Date().getDay()
+
 
 export default function Inicio() {
-   const { usuarioActivo } = useAuth()
+  const { usuarioActivo } = useAuth()
   const { perfil, cargando } = useProfile(usuarioActivo)
+  const { mascota } = usePet(perfil?.id_usuario)
+  const { racha, semanaVisual, actividadHoy } = useStreak(perfil?.id_usuario)
+  const DIAS = DIAS_LABELS.map((label, i) => ({
+  label,
+  done: i === diaHoy && actividadHoy ? 'hoy' : semanaVisual[i],
+}))
   return (
     <>
       <div className="layout">
@@ -39,25 +42,26 @@ export default function Inicio() {
 
           <div className="img-perfil">
             <div className="img-perfil-placeholder" />
+              <img src={cargando ? '...' : perfil?.avatar_url} alt="avatar" />
           </div>
 
           <p className="user-name">Bienvenido {cargando ? '...' : perfil?.usuario || 'Nombre de Usuario'}</p>
 
           <div className="racha-badge">
             <span className="flame">🔥</span>
-            <span>Día 2</span>
+            <span>{racha?.acumulado ?? 0} días</span>
           </div>
 
           <ul className="week-days">
-            {DIAS.map((d, i) => (
-              <li key={i}>
-                <span className="day-label">{d.label}</span>
-                <div className={`day-circle${d.done === 'hoy' ? ' today' : d.done ? ' done' : ''}`}>
-                  {d.done ? <IconCheck /> : null}
-                </div>
-              </li>
-            ))}
-          </ul>
+  {DIAS.map((d, i) => (
+    <li key={i}>
+      <span className="day-label">{d.label}</span>
+      <div className={`day-circle${d.done === 'hoy' ? ' today' : d.done ? ' done' : ''}`}>
+        {d.done ? <IconCheck /> : null}
+      </div>
+    </li>
+  ))}
+</ul>
         </aside>
 
         {/* Main top */}
@@ -67,9 +71,9 @@ export default function Inicio() {
           <div className="mascota-card">
             <div className="pet-badge">😊</div>
             <div className="pet-illustration">
-
+              <img src={mascota?.imagen_url ?? '/Paco_Default.png'} alt="mascota" />
             </div>
-            <p className="pet-name">PACO</p>
+            <p className="pet-name">{mascota?.nombre}</p>
           </div>
 
           {/* Stats */}

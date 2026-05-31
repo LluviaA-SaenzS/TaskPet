@@ -1,4 +1,6 @@
-// logica de mascota con Supabase
+// logica de mascota con Supabase 
+// MODIFICAR PARA AJUSTAR A NUESTRA BASE DE DATOS
+// Meter imagen default al crear mascota
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { supabase } from '../lib/supabase'
 
@@ -68,6 +70,7 @@ export function usePet(idUsuario, { decayPorPrioridad = {}, tareasPendientes = [
         sueno:        100,
         animo:        100,
         ultimo_decay: new Date().toISOString(),
+        //imagen_url:   null,
       })
       .select()
       .single()
