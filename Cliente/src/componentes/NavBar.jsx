@@ -94,6 +94,7 @@ export default function NavBar({ onAdd }) {
       aria-label="Agregar tarea"
       
       onClick={onAdd}
+      
     >
       <Plus size={22} />
     </button>

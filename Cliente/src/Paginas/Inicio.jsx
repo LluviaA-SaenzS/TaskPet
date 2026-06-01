@@ -2,6 +2,7 @@ import { useAuth } from '../hooks/useAuth'
 import { useProfile } from '../hooks/useProfile'
 import { usePet } from '../hooks/usePet'
 import { useStreak } from '../hooks/useStreak'
+import TaskForm       from '../componentes/TaskForm'
 
 import '../Estilos/Inicio.css'
 
@@ -41,8 +42,7 @@ export default function Inicio() {
           <p className="greeting">¡Hola!</p>
 
           <div className="img-perfil">
-            <div className="img-perfil-placeholder" />
-              <img src={cargando ? '...' : perfil?.avatar_url} alt="avatar" />
+              <img src={perfil?.avatar_url } alt="avatar" />
           </div>
 
           <p className="user-name">Bienvenido {cargando ? '...' : perfil?.usuario || 'Nombre de Usuario'}</p>

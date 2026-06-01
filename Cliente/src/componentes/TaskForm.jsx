@@ -15,7 +15,7 @@ const FORM_VACIO = {
   fecha_inicio: '',
   fecha_limite: '',
   etiquetas:    [],
-  prioridad:    'media',
+
 }
 
 export default function TaskForm({ open, onClose, onSubmit, initialData = null }) {
@@ -35,7 +35,7 @@ export default function TaskForm({ open, onClose, onSubmit, initialData = null }
               fecha_inicio: initialData.fecha_inicio ?? '',
               fecha_limite: initialData.fecha_limite ?? '',
               etiquetas:    initialData.etiquetas    ?? [],
-              prioridad:    initialData.prioridad    ?? 'media',
+              //prioridad:    initialData.prioridad    ?? 'media',
             }
           : FORM_VACIO
       )
@@ -112,14 +112,14 @@ export default function TaskForm({ open, onClose, onSubmit, initialData = null }
             </label>
           </div>
 
-          <label style={s.label}>
+         {/*  <label style={s.label}>
             Prioridad
             <select name="prioridad" value={form.prioridad} onChange={handleChange} style={s.input}>
               <option value="alta">Alta</option>
               <option value="media">Media</option>
               <option value="baja">Baja</option>
             </select>
-          </label>
+          </label>}*/}
 
           <div style={s.label}>
             Etiquetas
