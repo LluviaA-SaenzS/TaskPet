@@ -3,6 +3,7 @@
 // - Filtro "Completadas": muestra estado=true
 // - Filtros de etiqueta: aplican solo sobre pendientes
 // - Props: showForm / onCloseForm  (del Navbar "+" en App.jsx)
+//------------------ 223 MODIFICAR ACA
 
 import { useState } from 'react'
 import { useAuth }    from '../hooks/useAuth'
@@ -165,12 +166,11 @@ function TareaCard({ tarea, onToggle, onEditar, onEliminar, completada }) {
 
 // ── Página principal ──────────────────────────────────────────────────────────
 
-export default function Pendientes({ showForm, onCloseForm }) {
+export default function Pendientes({ showForm, onCloseForm }) { //------------------------- ACA SE MUESTRA EL COMPONENTE FORM 
   const { usuarioActivo }              = useAuth()
   const { perfil, cargando: cargandoPerfil } = useProfile(usuarioActivo)
 
   const {
-    tareasPendientes,
     tareasCompletadas,
     cargando,
     error,
@@ -220,7 +220,7 @@ export default function Pendientes({ showForm, onCloseForm }) {
     <div style={{ padding:'24px 16px', maxWidth:700, margin:'0 auto' }}>
 
       {/* Formulario nueva tarea */}
-      <TaskForm open={showForm}             onClose={onCloseForm}             onSubmit={handleCrear} />
+      <TaskForm open={showForm}             onClose={onCloseForm}             onSubmit={handleCrear} /> //------------------ MODIFICAR ACA
       {/* Formulario editar */}
       <TaskForm open={Boolean(tareaEditando)} onClose={() => setTareaEditando(null)} onSubmit={handleEditar} initialData={tareaEditando} />
 
