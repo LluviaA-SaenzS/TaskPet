@@ -79,7 +79,7 @@ export default function Landing() {
 
       {/* FOOTER */}
       <footer className="landing-footer">
-        <p>© 2025 TaskPet — Hecho con 🐾 y mucho café</p>
+        <p>© 2026 TaskPet — Hecho con 🐾 y mucho café</p>
       </footer>
 
     </div>

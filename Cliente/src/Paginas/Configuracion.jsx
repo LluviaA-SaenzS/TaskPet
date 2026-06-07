@@ -8,7 +8,7 @@ export default function Configuracion() {
   const { usuarioActivo, logout }    = useAuth()
   const { perfil, recargar: recargarPerfil } = useProfile(usuarioActivo)
   const { mascota, recargar: recargarMascota } = usePet(perfil?.id_usuario)
-  const { guardando, actualizarNombre, actualizarAvatar,
+  const { guardando, actualizarNombre, //actualizarAvatar,
           actualizarNombreMascota, actualizarImagenMascota,
           eliminarCuenta } = useSettings(usuarioActivo, perfil, mascota)
 
@@ -37,17 +37,17 @@ export default function Configuracion() {
     }
   }
 
-  async function handleAvatar(e) {
-    const archivo = e.target.files[0]
-    if (!archivo) return
-    const { ok, error } = await actualizarAvatar(archivo)
-    if (ok) {
-      recargarPerfil()
-      mostrarMensaje('ok', 'Foto actualizada.')
-    } else {
-      mostrarMensaje('error', error)
-    }
-  }
+//  async function handleAvatar(e) {
+//    const archivo = e.target.files[0]
+//    if (!archivo) return
+//    const { ok, error } = await actualizarAvatar(archivo)
+//    if (ok) {
+//      recargarPerfil()
+//      mostrarMensaje('ok', 'Foto actualizada.')
+//    } else {
+//  mostrarMensaje('error', error)
+//    }
+//  }
 
   async function handleNombreMascota(e) {
     e.preventDefault()
@@ -107,7 +107,7 @@ export default function Configuracion() {
           />
         )}
 
-        {/* Cambiar foto */}
+        {/* Cambiar foto 
         <label className="config-label">
           Cambiar foto de perfil
           <input
@@ -116,7 +116,7 @@ export default function Configuracion() {
             onChange={handleAvatar}
             disabled={guardando}
           />
-        </label>
+        </label>*/}
 
         {/* Cambiar nombre */}
         <form onSubmit={handleNombre} className="config-form">

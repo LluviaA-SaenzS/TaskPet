@@ -1,34 +1,48 @@
-// App.jsx — conecta el estado del formulario entre Navbar y Pendientes
+// App.jsx
+// TaskForm vive aquí para que funcione desde cualquier página
 import { useState } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import PWABadge from './PWABadge.jsx'
 import './App.css'
 
-import Navbar        from './componentes/NavBar'
+import NavBar    from './componentes/NavBar'
+import TaskForm  from './componentes/TaskForm'
 import RutaProtegida from './componentes/RutaProtegida'
 
+import { useAuth }    from './hooks/useAuth'
+import { useProfile } from './hooks/useProfile'
+import { useTasks }   from './hooks/useTasks'
+
+// Páginas
 import Landing       from './Paginas/Landing.jsx'
 import Auth          from './Paginas/Auth.jsx'
-import Inicio        from './Paginas/Inicio.jsx'
-import Mascota       from './Paginas/Mascota.jsx'
-import Pendientes    from './Paginas/Pendientes.jsx'
-import Calendario    from './Paginas/Calendario.jsx'
-import Configuracion from './Paginas/Configuracion.jsx'
+import Inicio       from './Paginas/Inicio'
+import Pendientes   from './Paginas/Pendientes'
+import Calendario   from './Paginas/Calendario'
+import Mascota      from './Paginas/Mascota'
+import Configuracion from './Paginas/Configuracion'
 
 export default function App() {
   const location = useLocation()
-
-  // Estado global del formulario — lo abre el Navbar, lo consume Pendientes
-  const [formAbierto, setFormAbierto] = useState(false)
-
   const sinNavbar    = ['/', '/auth']
   const mostrarNavbar = !sinNavbar.includes(location.pathname)
+  
+  const { usuarioActivo }  = useAuth()
+  const { perfil }         = useProfile(usuarioActivo)
+  const { crearTarea }     = useTasks(perfil?.id_usuario)
+
+  const [formAbierto, setFormAbierto] = useState(false)
+  const handleCrear = async (formData) => crearTarea(formData)
 
   return (
     <>
-      {mostrarNavbar && (
-        <Navbar onAdd={() => setFormAbierto(true)} />
-      )}
+     {mostrarNavbar && <NavBar onAdd={() => setFormAbierto(true)} />}
+      {/* Formulario global — disponible en cualquier página */}
+            <TaskForm
+              open={formAbierto}
+              onClose={() => setFormAbierto(false)}
+              onSubmit={handleCrear}
+            />
 
       <main className={mostrarNavbar ? 'tp-page-content' : ''}>
         <Routes>
@@ -37,26 +51,11 @@ export default function App() {
           <Route path="/auth" element={<Auth />} />
 
           {/* ── Protegidas ── */}
-          <Route path="/inicio" element={
-            <RutaProtegida><Inicio /></RutaProtegida>
-          } />
-          <Route path="/mascota" element={
-            <RutaProtegida><Mascota /></RutaProtegida>
-          } />
-          <Route path="/pendientes" element={
-            <RutaProtegida>
-              <Pendientes
-                showForm={formAbierto}
-                onCloseForm={() => setFormAbierto(false)}
-              />
-            </RutaProtegida>
-          } />
-          <Route path="/calendario" element={
-            <RutaProtegida><Calendario /></RutaProtegida>
-          } />
-          <Route path="/configuracion" element={
-            <RutaProtegida><Configuracion /></RutaProtegida>
-          } />
+          <Route path="/inicio"         element={<RutaProtegida><Inicio /></RutaProtegida>} />
+          <Route path="/mascota"        element={<RutaProtegida><Mascota /></RutaProtegida>} />
+          <Route path="/pendientes"     element={<RutaProtegida><Pendientes /></RutaProtegida>} />
+          <Route path="/calendario"     element={<RutaProtegida><Calendario /></RutaProtegida>} />
+          <Route path="/configuracion"  element={<RutaProtegida><Configuracion /></RutaProtegida>} />
         </Routes>
       </main>
 
@@ -64,3 +63,5 @@ export default function App() {
     </>
   )
 }
+
+

@@ -70,7 +70,6 @@ export function usePet(idUsuario, { decayPorPrioridad = {}, tareasPendientes = [
         sueno:        100,
         animo:        100,
         ultimo_decay: new Date().toISOString(),
-        //imagen_url:   null,
       })
       .select()
       .single()

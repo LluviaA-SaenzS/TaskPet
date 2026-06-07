@@ -6,6 +6,7 @@
   --tp-surface:  #ffffff;
   --tp-surface2: #f2f2f2;
   --tp-border:   #e5e5e5;
+
 }
 
 @media (prefers-color-scheme: dark) {

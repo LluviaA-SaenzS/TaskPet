@@ -1,4 +1,4 @@
-// Formulario flotante para crear o editar una tarea.
+// TaskForm.jsx
 // Props:
 //   open        : boolean
 //   onClose     : () => void
@@ -13,9 +13,10 @@ const FORM_VACIO = {
   titulo:       '',
   descripcion:  '',
   fecha_inicio: '',
+  hora_inicio:  '',
   fecha_limite: '',
+  hora_fin:     '',
   etiquetas:    [],
-
 }
 
 export default function TaskForm({ open, onClose, onSubmit, initialData = null }) {
@@ -24,7 +25,6 @@ export default function TaskForm({ open, onClose, onSubmit, initialData = null }
   const [enviando, setEnviando] = useState(false)
   const [errForm, setErrForm]   = useState(null)
 
-  // Poblar al abrir en modo edición
   useEffect(() => {
     if (open) {
       setForm(
@@ -33,9 +33,10 @@ export default function TaskForm({ open, onClose, onSubmit, initialData = null }
               titulo:       initialData.titulo       ?? '',
               descripcion:  initialData.descripcion  ?? '',
               fecha_inicio: initialData.fecha_inicio ?? '',
+              hora_inicio:  initialData.hora_inicio  ?? '',
               fecha_limite: initialData.fecha_limite ?? '',
+              hora_fin:     initialData.hora_fin     ?? '',
               etiquetas:    initialData.etiquetas    ?? [],
-              //prioridad:    initialData.prioridad    ?? 'media',
             }
           : FORM_VACIO
       )
@@ -101,25 +102,53 @@ export default function TaskForm({ open, onClose, onSubmit, initialData = null }
             />
           </label>
 
+          {/* Fecha y hora inicio */}
           <div style={s.fila}>
-            <label style={{ ...s.label, flex: 1 }}>
+            <label style={{ ...s.label, flex: 2 }}>
               Fecha inicio
-              <input type="date" name="fecha_inicio" value={form.fecha_inicio} onChange={handleChange} style={s.input} />
+              <input
+                type="date"
+                name="fecha_inicio"
+                value={form.fecha_inicio}
+                onChange={handleChange}
+                style={s.input}
+              />
             </label>
             <label style={{ ...s.label, flex: 1 }}>
-              Fecha límite
-              <input type="date" name="fecha_limite" value={form.fecha_limite} onChange={handleChange} style={s.input} />
+              Hora inicio
+              <input
+                type="time"
+                name="hora_inicio"
+                value={form.hora_inicio}
+                onChange={handleChange}
+                style={s.input}
+              />
             </label>
           </div>
 
-         {/*  <label style={s.label}>
-            Prioridad
-            <select name="prioridad" value={form.prioridad} onChange={handleChange} style={s.input}>
-              <option value="alta">Alta</option>
-              <option value="media">Media</option>
-              <option value="baja">Baja</option>
-            </select>
-          </label>}*/}
+          {/* Fecha y hora límite */}
+          <div style={s.fila}>
+            <label style={{ ...s.label, flex: 2 }}>
+              Fecha límite
+              <input
+                type="date"
+                name="fecha_limite"
+                value={form.fecha_limite}
+                onChange={handleChange}
+                style={s.input}
+              />
+            </label>
+            <label style={{ ...s.label, flex: 1 }}>
+              Hora fin
+              <input
+                type="time"
+                name="hora_fin"
+                value={form.hora_fin}
+                onChange={handleChange}
+                style={s.input}
+              />
+            </label>
+          </div>
 
           <div style={s.label}>
             Etiquetas

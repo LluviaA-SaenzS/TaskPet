@@ -1,0 +1,266 @@
+/* ── Pendientes.css ── */
+
+.pend-page {
+  padding: 24px 16px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ── Título ── */
+.pend-titulo {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 18px;
+  color: var(--tp-fg);
+}
+
+/* ── Filtros ── */
+.pend-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.pend-filtros-divider {
+  width: 1px;
+  background: var(--tp-border);
+  margin: 0 4px;
+  align-self: stretch;
+}
+
+.pend-chip {
+  border: 1px solid var(--tp-border);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  background: var(--tp-surface2);
+  color: var(--tp-fg);
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.pend-chip:hover {
+  border-color: #f4a261;
+  color: #f4a261;
+}
+
+.pend-chip.activo {
+  background: #f4a261;
+  color: #fff;
+  border-color: #f4a261;
+}
+
+.pend-chip.especial.activo {
+  background: #2a9d8f;
+  color: #fff;
+  border-color: #2a9d8f;
+}
+
+.pend-chip.especial:hover {
+  border-color: #2a9d8f;
+  color: #2a9d8f;
+}
+
+/* ── Estados vacíos / carga / error ── */
+.pend-estado {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 14px;
+}
+
+.pend-estado.cargando { color: var(--tp-muted); }
+.pend-estado.error    { color: #ef4444; }
+.pend-estado.vacio    { color: var(--tp-muted); }
+
+/* ── Lista ── */
+.pend-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Card de tarea ── */
+.tarea-card {
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  transition: opacity 0.2s, box-shadow 0.15s;
+}
+
+.tarea-card:hover {
+  box-shadow: 0 2px 12px rgba(244, 162, 97, 0.12);
+}
+
+.tarea-card.completada {
+  opacity: 0.55;
+}
+
+/* cabecera de la card */
+.tarea-card__cabecera {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.tarea-card__titulo-wrap {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.tarea-card__titulo {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--tp-fg);
+}
+
+.tarea-card__titulo.tachado {
+  text-decoration: line-through;
+  color: var(--tp-muted);
+}
+
+/* Badge prioridad */
+.badge-prioridad {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-left: 8px;
+}
+
+.badge-urgente    { background: #fee2e2; color: #ef4444; }
+.badge-semana     { background: #fff3e0; color: #f4a261; }
+.badge-mes        { background: #e0f2f1; color: #2a9d8f; }
+
+/* Menú ⋯ */
+.tarea-card__menu-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tarea-card__menu-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0 4px;
+  color: var(--tp-muted);
+  line-height: 1;
+}
+
+.tarea-card__menu-btn:hover {
+  color: var(--tp-fg);
+}
+
+.tarea-card__dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: var(--tp-surface);
+  border: 1px solid var(--tp-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  min-width: 130px;
+  overflow: hidden;
+}
+
+.tarea-card__dropdown-btn {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--tp-fg);
+  font-family: inherit;
+  transition: background 0.1s;
+}
+
+.tarea-card__dropdown-btn:hover {
+  background: var(--tp-surface2);
+}
+
+.tarea-card__dropdown-btn.eliminar {
+  color: #ef4444;
+}
+
+/* Descripción */
+.tarea-card__desc {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: var(--tp-muted);
+  line-height: 1.5;
+}
+
+/* Etiquetas */
+.tarea-card__etiquetas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.tarea-card__tag {
+  background: #fff3e0;
+  color: #e08c4a;
+  border-radius: 999px;
+  padding: 2px 10px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tarea-card__tag {
+    background: #3a2a1a;
+    color: #f4a261;
+  }
+}
+
+/* Footer done */
+.tarea-card__footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.tarea-card__done-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: var(--tp-fg);
+  cursor: pointer;
+  user-select: none;
+  gap: 6px;
+}
+
+.tarea-card__done-label input[type="checkbox"] {
+  accent-color: #2a9d8f;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .pend-page {
+    padding: 16px 12px;
+  }
+
+  .pend-titulo {
+    font-size: 20px;
+  }
+
+  .pend-chip {
+    font-size: 12px;
+    padding: 4px 11px;
+  }
+}
