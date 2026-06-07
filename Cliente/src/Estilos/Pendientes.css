@@ -1,0 +1,141 @@
+.pendientes-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 60px;
+  padding: 40px;
+  font-family: sans-serif;
+  color: #1a1a1a;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* --- Sidebar Filtros --- */
+.pendientes-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 65px; /* Alineado para que empiece debajo del título de tareas */
+  min-width: 160px;
+}
+
+.filter-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+/* Fondo gris para los elementos seleccionados (Trabajo, Hoy) */
+.filter-item.active {
+  background-color: #d9d9d9;
+}
+
+.filter-circle {
+  width: 16px;
+  height: 16px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Círculo gris para los filtros inactivos */
+.filter-item:not(.active) .filter-circle {
+  background-color: #d9d9d9;
+}
+
+/* --- Contenido Principal --- */
+.pendientes-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.pendientes-title {
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin-bottom: 24px;
+  margin-top: 0;
+}
+
+.tareas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* --- Tarjetas de Tarea --- */
+.tarea-card {
+  background-color: #d9d9d9;
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 120px;
+}
+
+.tarea-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tarea-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.tarea-options {
+  font-size: 1.5rem;
+  color: #888;
+  cursor: pointer;
+  line-height: 0.5;
+  letter-spacing: 2px;
+}
+
+.tarea-desc {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.tarea-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+}
+
+.tarea-tags {
+  display: flex;
+  gap: 8px;
+}
+
+.tag-circle {
+  width: 16px;
+  height: 16px;
+  background-color: #ffffff;
+  border-radius: 50%;
+}
+
+.tarea-done {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+
+.done-checkbox {
+  width: 14px;
+  height: 14px;
+  background-color: #ffffff;
+  border-radius: 2px;
+}
