@@ -24,5 +24,4 @@ dev-dist
 *.sln
 *.sw?
 
-*.env
-.env
+
