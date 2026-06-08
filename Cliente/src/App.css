@@ -6,7 +6,13 @@
   --tp-surface:  #ffffff;
   --tp-surface2: #f2f2f2;
   --tp-border:   #e5e5e5;
-
+  --color-primary: #f4a261;
+  --color-secondary: #e08c4a;
+  --color-success: #10b981;
+  --color-danger: #ef4444;
+  --color-background: #f4f5f7;
+  --color-card: #ffffff;
+  --color-text: #374151;
 }
 
 @media (prefers-color-scheme: dark) {
