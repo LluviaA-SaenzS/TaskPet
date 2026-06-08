@@ -3,7 +3,7 @@ import { useAuth }     from '../hooks/useAuth'
 import { useProfile }  from '../hooks/useProfile'
 import { usePet }      from '../hooks/usePet'
 import { useSettings } from '../hooks/useSettings'
-import '../Estilos/configuracion.css'
+import '../Estilos/Configuracion.css'
 
 export default function Configuracion() {
   const { usuarioActivo, logout }    = useAuth()
