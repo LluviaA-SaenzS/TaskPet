@@ -64,11 +64,11 @@ export function usePet(idUsuario, { decayPorPrioridad = {}, tareasPendientes = [
       .insert({
         id_usuario:   idUsuario,
         nombre:       nombre.trim(),
-        salud:        100,
-        hambre:       100,
-        sed:          100,
-        sueno:        100,
-        animo:        100,
+        salud:        98,
+        hambre:       80,
+        sed:          90,
+        sueno:        95,
+        animo:        98,
         ultimo_decay: new Date().toISOString(),
       })
       .select()

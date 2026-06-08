@@ -109,7 +109,7 @@ export default function Inicio() {
           {/* Stats */}
           <div className="stats-col">
             <div className="stat-card">
-              <span className="stat-number">6</span>
+              <span className="stat-number">1</span>
               <span className="stat-label">Pendientes</span>
             </div>
             <div className="stat-card">
