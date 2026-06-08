@@ -3,25 +3,23 @@
 //
 // Flujo:
 //  1. Carga hábitos de Supabase (solo al montar)
-//  2. Busca en localStorage si ya hay una selección válida (< 12 hrs)
-//  3. Si no hay o venció, elige 3 al azar y los guarda en localStorage
+//  2. Busca en localStorage si ya hay una selección válida para HOY
+//  3. Si no hay o es de otro día, elige 3 al azar y los guarda en localStorage
 //  4. marcarHecho → escribe en registrar_habitos y actualiza done[] local
 //
-// Mapeo de stat (sin columna extra en Supabase):
-//   id_habito % 5 → 0:salud  1:animo  2:sed  3:hambre  4:sueno
+// El cronómetro muestra el tiempo restante hasta la medianoche local.
+// Al llegar a medianoche se reinicia automáticamente.
 
 import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
 
 // ── Constantes ────────────────────────────────────────────────────────────────
 
-const DURACION_MS   = 12 * 60 * 60 * 1000   // 12 horas en milisegundos
-const N_HABITOS     = 3                       // cuántas tareas especiales por turno
-const LS_KEY        = 'tp_habitos_dia'        // clave en localStorage
+const N_HABITOS = 3
+const LS_KEY    = 'tp_habitos_dia'
 
 const STATS = ['salud', 'animo', 'sed', 'hambre', 'sueno']
 
-// Iconos y colores por stat (para mostrar en la UI)
 export const STAT_INFO = {
   salud:   { label: 'Salud',   emoji: '❤️',  color: '#ef4444' },
   animo:   { label: 'Ánimo',   emoji: '😊',  color: '#a855f7' },
@@ -32,6 +30,24 @@ export const STAT_INFO = {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
+/** Fecha de hoy en formato YYYY-MM-DD (hora local) */
+function fechaHoy() {
+  const d = new Date()
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
+/** Milisegundos que faltan para la próxima medianoche (hora local) */
+function msFaltaMedianoche() {
+  const ahora     = new Date()
+  const manana    = new Date(ahora)
+  manana.setDate(manana.getDate() + 1)
+  manana.setHours(0, 0, 0, 0)
+  return manana.getTime() - ahora.getTime()
+}
+
 /** Asigna un stat de forma determinista según el id del hábito */
 function statDeHabito(idHabito) {
   return STATS[idHabito % STATS.length]
@@ -39,7 +55,7 @@ function statDeHabito(idHabito) {
 
 /** Elige n elementos aleatorios de un array sin repetir */
 function elegirAleatorios(arr, n) {
-  const copia = [...arr]
+  const copia  = [...arr]
   const result = []
   while (result.length < n && copia.length > 0) {
     const idx = Math.floor(Math.random() * copia.length)
@@ -48,31 +64,27 @@ function elegirAleatorios(arr, n) {
   return result
 }
 
-/** Lee el bloque guardado en localStorage y lo valida */
+/** Lee el bloque guardado en localStorage y lo valida contra la fecha de hoy */
 function leerDesdeLs() {
   try {
     const raw = localStorage.getItem(LS_KEY)
     if (!raw) return null
 
     const parsed = JSON.parse(raw)
-    const ahora  = Date.now()
+    if (!parsed.fecha || !Array.isArray(parsed.habitos)) return null
 
-    if (!parsed.generadoEn || !Array.isArray(parsed.habitos)) return null
-    if (ahora - parsed.generadoEn >= DURACION_MS) return null
+    // Solo es válido si es del mismo día calendario
+    if (parsed.fecha !== fechaHoy()) return null
 
-    return parsed   // { generadoEn, habitos, done }
+    return parsed   // { fecha, habitos, done }
   } catch {
     return null
   }
 }
 
-/** Guarda el bloque en localStorage */
+/** Guarda el bloque en localStorage con la fecha de hoy */
 function guardarEnLs(habitos, done = {}) {
-  const bloque = {
-    generadoEn: Date.now(),
-    habitos,
-    done,
-  }
+  const bloque = { fecha: fechaHoy(), habitos, done }
   localStorage.setItem(LS_KEY, JSON.stringify(bloque))
   return bloque
 }
@@ -82,7 +94,7 @@ function guardarEnLs(habitos, done = {}) {
 export function useHabitos(idUsuario) {
   const [habitosDia,  setHabitosDia]  = useState([])
   const [done,        setDone]        = useState({})
-  const [msRestantes, setMsRestantes] = useState(DURACION_MS)
+  const [msRestantes, setMsRestantes] = useState(msFaltaMedianoche)
   const [cargando,    setCargando]    = useState(true)
   const [error,       setError]       = useState(null)
 
@@ -92,17 +104,17 @@ export function useHabitos(idUsuario) {
     setCargando(true)
     setError(null)
 
-    // 1. ¿Hay datos válidos en localStorage?
+    // 1. ¿Hay datos válidos de hoy en localStorage?
     const cache = leerDesdeLs()
     if (cache) {
       setHabitosDia(cache.habitos)
       setDone(cache.done ?? {})
-      setMsRestantes(DURACION_MS - (Date.now() - cache.generadoEn))
+      setMsRestantes(msFaltaMedianoche())
       setCargando(false)
       return
     }
 
-    // 2. No hay cache → cargar hábitos de Supabase
+    // 2. No hay cache válido → cargar hábitos de Supabase
     const { data, error: err } = await supabase
       .from('habitos')
       .select('id_habito, nombre, unidad')
@@ -114,15 +126,15 @@ export function useHabitos(idUsuario) {
     }
 
     // 3. Asignar stat y seleccionar N al azar
-    const conStat    = data.map((h) => ({ ...h, stat: statDeHabito(h.id_habito) }))
-    const seleccion  = elegirAleatorios(conStat, Math.min(N_HABITOS, conStat.length))
+    const conStat   = data.map((h) => ({ ...h, stat: statDeHabito(h.id_habito) }))
+    const seleccion = elegirAleatorios(conStat, Math.min(N_HABITOS, conStat.length))
 
     // 4. Guardar en localStorage
-    const bloque = guardarEnLs(seleccion, {})
+    guardarEnLs(seleccion, {})
 
     setHabitosDia(seleccion)
     setDone({})
-    setMsRestantes(DURACION_MS - (Date.now() - bloque.generadoEn))
+    setMsRestantes(msFaltaMedianoche())
     setCargando(false)
   }, [])
 
@@ -136,15 +148,14 @@ export function useHabitos(idUsuario) {
     if (cargando) return
 
     const tick = setInterval(() => {
-      setMsRestantes((prev) => {
-        const siguiente = prev - 1000
-        if (siguiente <= 0) {
-          localStorage.removeItem(LS_KEY)
-          inicializar()
-          return DURACION_MS
-        }
-        return siguiente
-      })
+      const ms = msFaltaMedianoche()
+      setMsRestantes(ms)
+
+      // Si ya pasó la medianoche, limpiar cache y reiniciar
+      if (ms <= 1000) {
+        localStorage.removeItem(LS_KEY)
+        inicializar()
+      }
     }, 1000)
 
     return () => clearInterval(tick)
@@ -155,7 +166,7 @@ export function useHabitos(idUsuario) {
   const marcarHecho = useCallback(async (idHabito) => {
     if (!idUsuario) return { ok: false, error: 'Sin usuario' }
 
-    const habito  = habitosDia.find((h) => h.id_habito === idHabito)
+    const habito = habitosDia.find((h) => h.id_habito === idHabito)
     if (!habito)  return { ok: false, error: 'Hábito no encontrado' }
 
     const yaHecho    = done[idHabito] ?? false
@@ -171,8 +182,7 @@ export function useHabitos(idUsuario) {
     }
 
     if (!yaHecho) {
-      // Solo escribe a Supabase al marcar (no al desmarcar)
-      const hoy = new Date().toISOString().split('T')[0]
+      const hoy = fechaHoy()
 
       const { data: existente } = await supabase
         .from('registrar_habitos')
@@ -180,7 +190,7 @@ export function useHabitos(idUsuario) {
         .eq('id_usuario', idUsuario)
         .eq('id_habito',  idHabito)
         .eq('fecha',      hoy)
-        .single()
+        .maybeSingle()
 
       if (existente) {
         const { error: errUpd } = await supabase
@@ -189,8 +199,7 @@ export function useHabitos(idUsuario) {
           .eq('id_registro', existente.id_registro)
 
         if (errUpd) {
-          console.warn('Error actualizando registro:', errUpd.message)
-          setDone(done)
+          setDone(done) // revertir
           return { ok: false, error: errUpd.message }
         }
       } else {
@@ -204,8 +213,7 @@ export function useHabitos(idUsuario) {
           })
 
         if (errIns) {
-          console.warn('Error insertando registro:', errIns.message)
-          setDone(done)
+          setDone(done) // revertir
           return { ok: false, error: errIns.message }
         }
       }
@@ -229,14 +237,14 @@ export function useHabitos(idUsuario) {
   const totalDone = Object.values(done).filter(Boolean).length
 
   return {
-    habitosDia,       // [{ id_habito, nombre, unidad, stat }]
-    done,             // { [id_habito]: bool }
-    totalDone,        // número de tareas marcadas
-    tiempoFormateado, // 'HH:MM:SS'
+    habitosDia,
+    done,
+    totalDone,
+    tiempoFormateado,
     msRestantes,
     cargando,
     error,
-    marcarHecho,      // async (idHabito) → { ok, stat?, puntos? }
+    marcarHecho,
     STAT_INFO,
   }
 }

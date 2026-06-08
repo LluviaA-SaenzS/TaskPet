@@ -1,7 +1,12 @@
 // Mascota.jsx
 // Panel izquierdo: imagen + nivel + barra XP + 5 barras de stats
-// Panel derecho:   3 tareas especiales + cronómetro compartido de 12 hrs
+// Panel derecho:   3 tareas especiales + cronómetro a medianoche
 import { useEffect, useState } from 'react'
+import {
+  Heart, Smile, Droplets, Bone, Moon,
+  Clock, CheckCircle2, Circle,
+} from 'lucide-react'
+
 import { useAuth }    from '../hooks/useAuth'
 import { useProfile } from '../hooks/useProfile'
 import { usePet }     from '../hooks/usePet'
@@ -9,9 +14,17 @@ import { useNivel }   from '../hooks/useNivel'
 import { useHabitos, STAT_INFO } from '../hooks/useHabitos'
 import '../Estilos/Mascota.css'
 
-import imgPacoDefault   from '../assets/Paco_Default.png'
+import imgPacoDefault from '../assets/Paco_Default.png'
 
-// ── Colores por stat ──────────────────────────────────────────────────────────
+// ── Íconos por stat ───────────────────────────────────────────────────────────
+
+const ICONO_STAT = {
+  salud:   <Heart  size={14} strokeWidth={2} />,
+  animo:   <Smile  size={14} strokeWidth={2} />,
+  sed:     <Droplets size={14} strokeWidth={2} />,
+  hambre:  <Bone   size={14} strokeWidth={2} />,
+  sueno:   <Moon   size={14} strokeWidth={2} />,
+}
 
 const COLOR_STAT = {
   salud:  '#ef4444',
@@ -30,7 +43,9 @@ function BarraStat({ stat, valor }) {
 
   return (
     <div className="tp-stat-row">
-      <span className="tp-stat-emoji">{info.emoji}</span>
+      <span className="tp-stat-emoji" style={{ color }}>
+        {ICONO_STAT[stat]}
+      </span>
       <span className="tp-stat-label">{info.label}</span>
       <div className="tp-stat-track">
         <div
@@ -51,10 +66,10 @@ function BarraStat({ stat, valor }) {
 
 function PanelMascota({ mascota, nivel, xpActual, xpSiguiente, pctXp, totalDone }) {
   const stats = ['salud', 'animo', 'sed', 'hambre', 'sueno']
-  const [imgMascota, setImgMascota] = useState(imgPacoDefault)
-  
+  const [imgSrc, setImgSrc] = useState(mascota?.imagen_url || imgPacoDefault)
+
   useEffect(() => {
-    if (mascota?.imagen_url) setImgMascota(mascota.imagen_url)
+    setImgSrc(mascota?.imagen_url || imgPacoDefault)
   }, [mascota?.imagen_url])
 
   if (!mascota) return null
@@ -73,17 +88,12 @@ function PanelMascota({ mascota, nivel, xpActual, xpSiguiente, pctXp, totalDone 
 
       {/* Imagen */}
       <div className="tp-mascota-img-wrap">
-        {mascota.imagen_url
-        ? <img src={mascota.imagen_url} alt={mascota.nombre} className="tp-mascota-img" />
-          : <div className="tp-mascota-placeholder"><img
-                          src={imgMascota}
-                          alt="mascota"
-                          onError={(e) => {
-                            e.target.onerror = null
-                            setImgMascota(imgPacoDefault)
-                        }}
-                        /></div>
-        }
+        <img
+          src={imgSrc}
+          alt={mascota.nombre}
+          className="tp-mascota-img"
+          onError={() => setImgSrc(imgPacoDefault)}
+        />
       </div>
 
       {/* Nombre */}
@@ -111,7 +121,8 @@ function PanelMascota({ mascota, nivel, xpActual, xpSiguiente, pctXp, totalDone 
 // ── TareaEspecial ─────────────────────────────────────────────────────────────
 
 function TareaEspecial({ habito, hecho, onToggle }) {
-  const info = STAT_INFO[habito.stat] ?? { emoji: '⭐', label: habito.stat, color: '#888' }
+  const info  = STAT_INFO[habito.stat] ?? { emoji: '⭐', label: habito.stat, color: '#888' }
+  const icono = ICONO_STAT[habito.stat]
 
   return (
     <div className={`tp-tarea-card ${hecho ? 'tp-tarea-hecha' : ''}`}>
@@ -122,26 +133,28 @@ function TareaEspecial({ habito, hecho, onToggle }) {
           className="tp-tarea-stat-badge"
           style={{ background: `${info.color}22`, color: info.color }}
         >
-          {info.emoji} {info.label}
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            {icono} {info.label}
+          </span>
         </span>
       </div>
 
       <p className="tp-tarea-puntos">+{habito.unidad} pts · {info.label}</p>
 
       <div className="tp-tarea-footer">
-        <span
-          className="tp-tarea-circulo"
-          style={{ background: hecho ? info.color : 'var(--tp-border, #e5e7eb)' }}
-        />
-        <label className="tp-tarea-done-label">
-          Done
-          <input
-            type="checkbox"
-            checked={hecho}
-            onChange={onToggle}
-            className="tp-tarea-checkbox"
-          />
-        </label>
+        <button
+          className="tp-tarea-done-btn"
+          onClick={onToggle}
+          aria-label={hecho ? 'Desmarcar tarea' : 'Marcar como hecha'}
+        >
+          {hecho
+            ? <CheckCircle2 size={22} color={info.color} strokeWidth={2} />
+            : <Circle       size={22} color="var(--tp-border)" strokeWidth={2} />
+          }
+          <span style={{ color: hecho ? info.color : 'var(--tp-muted)' }}>
+            {hecho ? 'Hecho' : 'Marcar'}
+          </span>
+        </button>
       </div>
 
     </div>
@@ -157,7 +170,10 @@ function PanelTareas({ habitosDia, done, tiempoFormateado, totalDone, onToggle, 
 
       <div className="tp-timer-row">
         <span className="tp-timer-progreso">{totalDone}/3</span>
-        <span className="tp-timer-clock">⏱ {tiempoFormateado}</span>
+        <span className="tp-timer-clock">
+          <Clock size={14} strokeWidth={2} style={{ verticalAlign: 'middle', marginRight: 4 }} />
+          {tiempoFormateado}
+        </span>
       </div>
 
       {cargando && <p className="tp-tareas-estado">Cargando hábitos…</p>}
@@ -184,7 +200,6 @@ function PanelTareas({ habitosDia, done, tiempoFormateado, totalDone, onToggle, 
 export default function Mascota() {
   const { usuarioActivo }                    = useAuth()
   const { perfil, cargando: cargandoPerfil } = useProfile(usuarioActivo)
-   
 
   const {
     mascota,
@@ -210,16 +225,13 @@ export default function Mascota() {
     marcarHecho,
   } = useHabitos(perfil?.id_usuario)
 
-  // Al marcar: sube stat de la mascota y recalcula nivel
   const handleToggle = async (idHabito) => {
     const result = await marcarHecho(idHabito)
     if (result.ok && result.stat) {
       await subirStatPorHabito(result.stat, result.puntos)
-      await recargarNivel()   // refleja los nuevos puntos en la barra XP
+      await recargarNivel()
     }
   }
-
-  // ── Guardas ─────────────────────────────────────────────────────────────────
 
   if (cargandoPerfil || cargandoMascota) {
     return (
@@ -238,8 +250,6 @@ export default function Mascota() {
       </div>
     )
   }
-
-  // ── Render ───────────────────────────────────────────────────────────────────
 
   return (
     <div className="tp-mascota-page">
