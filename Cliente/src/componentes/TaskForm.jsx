@@ -196,7 +196,7 @@ const s = {
   fila:     { display:'flex', gap:12 },
   tags:     { display:'flex', flexWrap:'wrap', gap:8, marginTop:4 },
   tag:      { border:'1px solid var(--tp-border)', borderRadius:999, padding:'4px 12px', fontSize:13, cursor:'pointer', background:'var(--tp-surface2)', color:'var(--tp-fg)' },
-  tagActivo:{ background:'var(--tp-primary)', color:'#fff', borderColor:'var(--tp-primary)' },
+  tagActivo:{ background:'var(--tp-primary)', color:'#fff' },
   acciones: { display:'flex', justifyContent:'flex-end', gap:10, marginTop:6 },
   btnPri:   { background:'var(--tp-primary)', color:'#fff', border:'none', borderRadius:8, padding:'9px 20px', fontSize:14, fontWeight:600, cursor:'pointer' },
   btnSec:   { background:'var(--tp-surface2)', color:'var(--tp-fg)', border:'1px solid var(--tp-border)', borderRadius:8, padding:'9px 20px', fontSize:14, cursor:'pointer' },

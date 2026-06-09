@@ -79,14 +79,14 @@
 .tp-xp-track {
   flex: 1;
   height: 6px;
-  background: var(--tp-surface2);
+  background: #ddd;
   border-radius: 99px;
   overflow: hidden;
 }
 
 .tp-xp-fill {
   height: 100%;
-  background: var(--tp-primary);
+  background: #ff5e82;
   border-radius: 99px;
   transition: width 0.4s ease;
 }
@@ -197,7 +197,7 @@
 .tp-dia-track {
   flex: 1;
   height: 6px;
-  background: var(--tp-surface2);
+  background: #ddd;
   border-radius: 99px;
   overflow: hidden;
 }

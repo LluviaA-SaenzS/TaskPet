@@ -23,7 +23,6 @@
   color: var(--tp-fg, #1a1a1a);
   min-width: 180px;
   text-align: center;
-  display: flex;
   align-items: center;
   gap: 8px;
 }

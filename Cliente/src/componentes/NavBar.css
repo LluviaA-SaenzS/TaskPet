@@ -59,8 +59,8 @@
   transition: background 0.18s, color 0.18s;
 }
 .tp-pill-btn.active {
-  background: var(--tp-surface);
-  color: var(--tp-primary);
+  background: var(--color-primary);
+  color: white;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
 }
 
@@ -124,8 +124,8 @@
   transform: scale(1);
 }
 .tp-bubble-item.active {
-  background: var(--tp-fg);
-  color: var(--tp-surface);
+    background: var(--color-primary);
+  color: white;
 }
 
 /* ══════════════════════════════════════════
