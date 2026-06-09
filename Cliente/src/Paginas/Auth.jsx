@@ -1,6 +1,4 @@
-// Inicio de sesion y Registro de usuarios
-// logica en ../hooks/useAuth.js
-
+// Auth.jsx
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
@@ -11,30 +9,41 @@ export default function Auth() {
   const { login, registro } = useAuth()
   const [tab, setTab] = useState('login')
 
-  const [loginForm, setLoginForm] = useState({ usuario: '', contrasena: '' })
+  const [loginForm,    setLoginForm]    = useState({ usuario: '', contrasena: '' })
   const [registroForm, setRegistroForm] = useState({ usuario: '', correo: '', contrasena: '' })
-  const [error, setError] = useState('')
+  const [error,        setError]        = useState('')
+  const [enviando,     setEnviando]     = useState(false)
 
-//----------------------------------------------------------- DATOS LOGIN
   function handleLoginChange(e) {
     setLoginForm({ ...loginForm, [e.target.name]: e.target.value })
   }
-//----------------------------------------------------------- DATOS REGISTRO
+
   function handleRegistroChange(e) {
     setRegistroForm({ ...registroForm, [e.target.name]: e.target.value })
   }
-//----------------------------------------------------------- ERRORES LOGIN
-  function handleLogin(e) {
+
+  async function handleLogin(e) {
     e.preventDefault()
     setError('')
-    const resultado = login(loginForm.usuario, loginForm.contrasena)
+    setEnviando(true)
+    const resultado = await login(loginForm.usuario, loginForm.contrasena)
+    setEnviando(false)
     if (!resultado.ok) setError(resultado.error)
   }
-//----------------------------------------------------------- ERRORES REGISTRO
-  function handleRegistro(e) {
+
+  async function handleRegistro(e) {
     e.preventDefault()
     setError('')
-    const resultado = registro(registroForm.usuario, registroForm.correo, registroForm.contrasena)
+
+    // Validación local antes de llamar Supabase
+    if (registroForm.contrasena.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres.')
+      return
+    }
+
+    setEnviando(true)
+    const resultado = await registro(registroForm.usuario, registroForm.correo, registroForm.contrasena)
+    setEnviando(false)
     if (!resultado.ok) setError(resultado.error)
   }
 
@@ -81,7 +90,9 @@ export default function Auth() {
               onChange={handleLoginChange}
               required
             />
-            <button type="submit" className="auth-btn">Entrar</button>
+            <button type="submit" className="auth-btn" disabled={enviando}>
+              {enviando ? 'Entrando…' : 'Entrar'}
+            </button>
           </form>
         )}
 
@@ -114,12 +125,14 @@ export default function Auth() {
               onChange={handleRegistroChange}
               required
             />
-            <button type="submit" className="auth-btn">Crear cuenta</button>
+            <button type="submit" className="auth-btn" disabled={enviando}>
+              {enviando ? 'Creando cuenta…' : 'Crear cuenta'}
+            </button>
           </form>
         )}
 
         <button className="auth-volver" onClick={() => navigate('/')}>
-           Volver al inicio
+          Volver al inicio
         </button>
 
       </div>
