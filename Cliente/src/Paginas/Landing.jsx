@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom'
+import logoTask from '../assets/Logotask.svg'   // ← importar como módulo
 import '../Estilos/Landing.css'
 
 export default function Landing() {
   const navigate = useNavigate()
 
-  const features = [ //----------------------------------------------- informacion de las tarjetas
+  const features = [
     {
       emoji: '🐾',
       titulo: 'Tu mascota crece contigo',
@@ -25,7 +26,6 @@ export default function Landing() {
   return (
     <div className="landing">
 
-      {/* NAVBAR */}
       <nav className="landing-nav">
         <span className="landing-logo">TaskPet</span>
         <div className="landing-nav-btns">
@@ -38,7 +38,6 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* HERO */}
       <section className="landing-hero">
         <h1 className="hero-titulo">
           Completa tareas,<br />
@@ -57,13 +56,12 @@ export default function Landing() {
           </button>
         </div>
 
-        {/* Placeholder imagen hero */}
         <div className="hero-imagen">
-          <img src='/Logotask.svg'></img>
+          {/* logoTask es ahora una URL resuelta por Vite — funciona en Vercel */}
+          <img src={logoTask} alt="TaskPet logo" />
         </div>
       </section>
 
-      {/* FEATURES */}
       <section className="landing-features">
         <h2 className="features-titulo">¿Qué puedes hacer?</h2>
         <div className="features-grid">
@@ -77,7 +75,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="landing-footer">
         <p>© 2026 TaskPet — Hecho con 🐾 y mucho café</p>
       </footer>
