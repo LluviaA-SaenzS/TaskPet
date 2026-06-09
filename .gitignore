@@ -23,6 +23,12 @@ dev-dist
 *.njsproj
 *.sln
 *.sw?
+<<<<<<< HEAD
 
 *.env
 .env
+=======
+*.env
+.env
+
+>>>>>>> 735b6abcedfeaa1219f62f9084fbc2c4f7dce6ba
